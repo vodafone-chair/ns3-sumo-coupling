@@ -1,9 +1,6 @@
-# ns3-sumo-coupling
-A ns3 module for bidirectional coupling with SUMO
-
 ### Description
 
-This ns3 module implements a bidirectional coupling to the road traffic simulator [SUMO](https://software.dlr.de/p/sumo/home/). It dynamically synchronizes the positions of SUMO vehicles with corresponding ns3 nodes. Additionally, the state of SUMO vehicles can be controlled via ns3 for e.g. changing the speed. The module is built up on the [TraCI API](https://software.dlr.de/p/sumo/home/) of the SUMO simulator. The module prerequisites a SUMO installation of version 0.29.0 or higher, but no additional sources.
+This ns3 module implements a bidirectional coupling to the road traffic simulator [SUMO](https://software.dlr.de/p/sumo/home/). It dynamically synchronizes the positions of SUMO vehicles with corresponding ns3 nodes. Additionally, the state of SUMO vehicles can be controlled via ns3 for e.g. changing the speed. The module is built up on the [TraCI API](http://sumo.dlr.de/wiki) of the SUMO simulator. The module prerequisites a SUMO installation of version 0.29.0 or higher, but no additional sources.
 
 ### Usage
 
@@ -71,5 +68,6 @@ This module was tested on the following system:
 [2] Wegener, Axel & Piorkowski, Michal & Raya, Maxim & Hellbrück, Horst & Fischer, Stefan & Hubaux, Jean-Pierre. (2008). TraCI: An Interface for Coupling Road Traffic and Network Simulators. Proceedings of the 11th Communications and Networking Simulation Symposium, CNS'08.
 
 
-### License
-GNU General Public License version 3.0 (GPLv3)
+### Authors
+Patrick Schmager, TU Dresden, Vodafone Chair, <patrick.schmager@tu-dresden.de>
+Sebastian Kuehlmorgen, TU Dresden, Vodafone Chair, <sebastian.kuehlmorgen@tu-dresden.de>
