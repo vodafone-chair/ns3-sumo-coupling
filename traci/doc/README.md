@@ -1,9 +1,7 @@
 ### Description
-
 This ns3 module implements a bidirectional coupling to the road traffic simulator [SUMO](https://software.dlr.de/p/sumo/home/). It dynamically synchronizes the positions of SUMO vehicles with corresponding ns3 nodes. Additionally, the state of SUMO vehicles can be controlled via ns3, e.g. for changing the speed. The module is built up on the [TraCI API](http://sumo.dlr.de/wiki) of the SUMO simulator. The module prerequisites a SUMO installation of version 0.29.0 or higher, but no additional sources.
 
 ### Usage
-
 Copy the `traci/` and `traci-applications/` directory into your `<ns3-root>/src/` directory.
 
 Build/rebuild your ns3 simulator with the new module and run the example.
@@ -11,8 +9,19 @@ Build/rebuild your ns3 simulator with the new module and run the example.
 $ cd <ns3-root>/
 $ ./waf configure --enable-examples
 $ ./waf build
+$ ./waf --run ns3-sumo-coupling-simple
+```
+To visualize the scenario in ns3 use
+```sh
 $ ./waf --run ns3-sumo-coupling-simple --vis
 ```
+To visualize the scenario additionally with `sumo-gui` set the attribute in the example `ns3-sumo-coupling-simple.cc` to 
+```
+client->SetAttribute("SumoGUI", BooleanValue(true));
+```
+
+### Remarks
+ns3 is not considered to support dynamic node generation and destruction; everything should be defined BEFORE the simulation starts. Hence, for all SUMO scenarios with a fixed number of vehicles, created at the beginning of the simulation, no dynamic ns3 node generation/destruction is necessary. However, most SUMO scenarios include and exlude vehicles during the simulation, which requires ns3 to define a "node pool" before simulation starts (see example `ns3-sumo-coupling-simple.cc`). It is crucial to ensure an appropriate functionality for node inclusion and exclusion in ns3 to avoid unwanted packet transmissions within the "node pool". Therefore, additional functions in the application and other layers should be implemented. 
 
 ### Update SUMO source code of the module
 The module uses the source code of SUMO (version 0.31.0) for compiling the TraCI API. The following steps are necessary for updating the used SUMO sources e.g. if there are changes in the TraCI API.
@@ -55,7 +64,7 @@ Adapt the corresponding lines in the files to the new file names.
 #include "TraCIAPI.h" → #include "sumo-TraCIAPI.h"
 ```
 
-### Note
+### System specification
 This module was tested on the following system:
 * ns3: 3.26
 * SUMO: 0.31.0
