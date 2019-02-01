@@ -6,13 +6,11 @@
 #ifndef NS3_MODULE_MOBILITY
 
 // Module headers:
-#include "traci-client.h"
-#include "traci-functions.h"
-#include "traci-mobility-model.h"
 #include "sumo-config.h"
 #include "sumo-socket.h"
 #include "sumo-storage.h"
 #include "sumo-TraCIAPI.h"
-#include "sumo-TraCIDefs.h"
 #include "sumo-TraCIConstants.h"
+#include "sumo-TraCIDefs.h"
+#include "traci-client.h"
 #endif

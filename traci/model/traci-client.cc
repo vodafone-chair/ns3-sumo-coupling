@@ -59,9 +59,9 @@ namespace ns3
                   MakeUintegerChecker<uint32_t> ())
     .AddAttribute ("SumoWaitForSocket",
                   "Wait XX sec (=1e6 microsec) until sumo opens socket for traci connection.",
-                  UintegerValue (1000000),
-                  MakeUintegerAccessor (&TraciClient::m_sumoWaitForSocket),
-                  MakeUintegerChecker<uint32_t> ())
+                  TimeValue (ns3::Seconds(1.0)),
+                  MakeTimeAccessor (&TraciClient::m_sumoWaitForSocket),
+                  MakeTimeChecker ())
     .AddAttribute ("SumoGUI",
                   "Turn SUMO GUI on/off.",
                   BooleanValue (false),
@@ -120,18 +120,19 @@ namespace ns3
     m_penetrationRate = 1.0;
     m_sumoLogFile = false;
     m_sumoStepLog = false;
-    m_sumoWaitForSocket = 1;
+    m_sumoWaitForSocket = ns3::Seconds(1.0);
   }
 
   TraciClient::~TraciClient(void)
   {
     NS_LOG_FUNCTION(this);
+    SumoStop();
   }
 
   void
   TraciClient::SumoStop()
   {
-	NS_LOG_FUNCTION(this);
+    NS_LOG_FUNCTION(this);
 
     try
       {
@@ -146,7 +147,7 @@ namespace ns3
   std::string
   TraciClient::GetVehicleId(Ptr<Node> node)
   {
-	NS_LOG_FUNCTION(this);
+    NS_LOG_FUNCTION(this);
 
     std::string foundVeh("");
 
@@ -166,7 +167,7 @@ namespace ns3
   std::string
   TraciClient::GetSumoCmdString(void)
   {
-	NS_LOG_FUNCTION(this);
+    NS_LOG_FUNCTION(this);
 
     if (m_sumoConfigPath == "")
       {
@@ -242,8 +243,8 @@ namespace ns3
       }
 
     // wait 1 sec (=1e6 microsec) until sumo opens socket for traci connection
-    std::cout << "Sumo: wait for socket: " << (m_sumoWaitForSocket*1e-6) << "s" << std::endl;
-    usleep(m_sumoWaitForSocket);
+    std::cout << "Sumo: wait for socket: " << m_sumoWaitForSocket.GetSeconds() << "s" << std::endl;
+    usleep(m_sumoWaitForSocket.GetMicroSeconds());
 
     // connect to sumo via traci
     try
@@ -256,7 +257,7 @@ namespace ns3
       }
 
     // start sumo and simulate until the specified time
-    this->TraCIAPI::simulationStep(m_startTime.GetMilliSeconds());
+    this->TraCIAPI::simulationStep(m_startTime.GetSeconds());
 
     // synchronise sumo vehicles with ns3 nodes
     SynchroniseVehicleNodeMap();
@@ -276,7 +277,7 @@ namespace ns3
     try
       {
         // get current simulation time
-        auto nextTime = Simulator::Now().GetMilliSeconds() + m_synchInterval.GetMilliSeconds() + m_startTime.GetMilliSeconds();
+        auto nextTime = Simulator::Now().GetSeconds() + m_synchInterval.GetSeconds() + m_startTime.GetSeconds();
 
         // command sumo to simulate next time step
         this->TraCIAPI::simulationStep(nextTime);
@@ -310,7 +311,7 @@ namespace ns3
             std::string veh(it->first);
 
             // get vehicle position from sumo
-            TraCIPosition pos(this->TraCIAPI::vehicle.getPosition(veh));
+            libsumo::TraCIPosition pos(this->TraCIAPI::vehicle.getPosition(veh));
 
             // get corresponding ns3 node from map
             Ptr<MobilityModel> mob = m_vehicleNodeMap.at(veh)->GetObject<MobilityModel>();
@@ -446,42 +447,42 @@ return m_vehicleNodeMap.size();
 bool
 TraciClient::PortFreeCheck (uint32_t portNum)
 {
-	int socketFd;
-	struct sockaddr_in address;
+    int socketFd;
+    struct sockaddr_in address;
 
-	// Creating socket file descriptor
-	if ((socketFd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-	{
-	  perror("socket failed");
-	  exit(EXIT_FAILURE);
-	}
+    // Creating socket file descriptor
+    if ((socketFd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    {
+      perror("socket failed");
+      exit(EXIT_FAILURE);
+    }
 
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons( portNum );
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons( portNum );
 
-	// Forcefully attaching socket to the specified port
-	if (bind(socketFd, (struct sockaddr *)&address, sizeof(address))<0)
-	{
-	  // port not available
-	  return false;
-	}
-	else
-	{
-	  // port available
-	  ::close(socketFd); // goto to top empty namespace to avoid conclict with TraCIAPI::close()
-	  return true;
-	}
+    // Forcefully attaching socket to the specified port
+    if (bind(socketFd, (struct sockaddr *)&address, sizeof(address))<0)
+    {
+      // port not available
+      return false;
+    }
+    else
+    {
+      // port available
+      ::close(socketFd); // goto to top empty namespace to avoid conclict with TraCIAPI::close()
+      return true;
+    }
 }
 
 uint32_t
 TraciClient::GetFreePort (uint32_t portNum)
 {
-	uint32_t port = portNum;
-	while (!PortFreeCheck(port))
-	{
-	  ++port;
-	}
+    uint32_t port = portNum;
+    while (!PortFreeCheck(port))
+    {
+      ++port;
+    }
 
 return port;
 }

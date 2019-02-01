@@ -26,7 +26,7 @@ class Packet;
  *
  * Traffic information is broadcasted
  */
-class TrafficInfoServer : public Application 
+class RsuSpeedControl : public Application 
 {
 public:
   /**
@@ -34,8 +34,8 @@ public:
    * \return the object TypeId
    */
   static TypeId GetTypeId (void);
-  TrafficInfoServer ();
-  virtual ~TrafficInfoServer ();
+  RsuSpeedControl ();
+  virtual ~RsuSpeedControl ();
 
 protected:
   virtual void DoDispose (void);
@@ -69,7 +69,7 @@ private:
   TracedCallback<Ptr<const Packet> > m_txTrace;
 };
 
-class TrafficInfoClient : public Application 
+class VehicleSpeedControl : public Application 
 {
 public:
   /**
@@ -78,9 +78,9 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  TrafficInfoClient ();
+  VehicleSpeedControl ();
 
-  virtual ~TrafficInfoClient ();
+  virtual ~VehicleSpeedControl ();
 
   void StopApplicationNow ();
 

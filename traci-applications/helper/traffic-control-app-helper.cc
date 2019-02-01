@@ -1,18 +1,19 @@
-#include "traffic-info-helper.h"
-#include "ns3/traffic-info.h"
+#include "traffic-control-app-helper.h"
+
+#include "ns3/traffic-control-app.h"
 #include "ns3/uinteger.h"
 #include "ns3/names.h"
 
 namespace ns3 {
 
-TrafficInfoServerHelper::TrafficInfoServerHelper (uint16_t port)
+RsuSpeedControlHelper::RsuSpeedControlHelper (uint16_t port)
 {
-  m_factory.SetTypeId (TrafficInfoServer::GetTypeId ());
+  m_factory.SetTypeId (RsuSpeedControl::GetTypeId ());
   SetAttribute ("Port", UintegerValue (port));
 }
 
 void 
-TrafficInfoServerHelper::SetAttribute (
+RsuSpeedControlHelper::SetAttribute (
   std::string name, 
   const AttributeValue &value)
 {
@@ -20,20 +21,20 @@ TrafficInfoServerHelper::SetAttribute (
 }
 
 ApplicationContainer
-TrafficInfoServerHelper::Install (Ptr<Node> node) const
+RsuSpeedControlHelper::Install (Ptr<Node> node) const
 {
   return ApplicationContainer (InstallPriv (node));
 }
 
 ApplicationContainer
-TrafficInfoServerHelper::Install (std::string nodeName) const
+RsuSpeedControlHelper::Install (std::string nodeName) const
 {
   Ptr<Node> node = Names::Find<Node> (nodeName);
   return ApplicationContainer (InstallPriv (node));
 }
 
 ApplicationContainer
-TrafficInfoServerHelper::Install (NodeContainer c) const
+RsuSpeedControlHelper::Install (NodeContainer c) const
 {
   ApplicationContainer apps;
   for (NodeContainer::Iterator i = c.Begin (); i != c.End (); ++i)
@@ -45,22 +46,22 @@ TrafficInfoServerHelper::Install (NodeContainer c) const
 }
 
 Ptr<Application>
-TrafficInfoServerHelper::InstallPriv (Ptr<Node> node) const
+RsuSpeedControlHelper::InstallPriv (Ptr<Node> node) const
 {
-  Ptr<Application> app = m_factory.Create<TrafficInfoServer> ();
+  Ptr<Application> app = m_factory.Create<RsuSpeedControl> ();
   node->AddApplication (app);
 
   return app;
 }
 
-TrafficInfoClientHelper::TrafficInfoClientHelper (uint16_t port)
+VehicleSpeedControlHelper::VehicleSpeedControlHelper (uint16_t port)
 {
-  m_factory.SetTypeId (TrafficInfoClient::GetTypeId ());
+  m_factory.SetTypeId (VehicleSpeedControl::GetTypeId ());
   SetAttribute ("Port", UintegerValue (port));
 }
 
 void 
-TrafficInfoClientHelper::SetAttribute (
+VehicleSpeedControlHelper::SetAttribute (
   std::string name, 
   const AttributeValue &value)
 {
@@ -68,20 +69,20 @@ TrafficInfoClientHelper::SetAttribute (
 }
 
 ApplicationContainer
-TrafficInfoClientHelper::Install (Ptr<Node> node) const
+VehicleSpeedControlHelper::Install (Ptr<Node> node) const
 {
   return ApplicationContainer (InstallPriv (node));
 }
 
 ApplicationContainer
-TrafficInfoClientHelper::Install (std::string nodeName) const
+VehicleSpeedControlHelper::Install (std::string nodeName) const
 {
   Ptr<Node> node = Names::Find<Node> (nodeName);
   return ApplicationContainer (InstallPriv (node));
 }
 
 ApplicationContainer
-TrafficInfoClientHelper::Install (NodeContainer c) const
+VehicleSpeedControlHelper::Install (NodeContainer c) const
 {
   ApplicationContainer apps;
   for (NodeContainer::Iterator i = c.Begin (); i != c.End (); ++i)
@@ -93,9 +94,9 @@ TrafficInfoClientHelper::Install (NodeContainer c) const
 }
 
 Ptr<Application>
-TrafficInfoClientHelper::InstallPriv (Ptr<Node> node) const
+VehicleSpeedControlHelper::InstallPriv (Ptr<Node> node) const
 {
-  Ptr<Application> app = m_factory.Create<TrafficInfoClient> ();
+  Ptr<Application> app = m_factory.Create<VehicleSpeedControl> ();
   node->AddApplication (app);
 
   return app;

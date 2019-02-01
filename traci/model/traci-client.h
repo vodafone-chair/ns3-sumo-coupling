@@ -106,7 +106,7 @@ private:
   bool m_sumoStepLog;
   double m_altitude;
   int m_sumoSeed;
-  uint32_t m_sumoWaitForSocket;
+  ns3::Time m_sumoWaitForSocket;
 
 };
 

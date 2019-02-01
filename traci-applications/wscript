@@ -9,15 +9,15 @@
 def build(bld):
     module = bld.create_ns3_module('traci-applications', ['core', 'wifi', 'applications', 'mobility','internet', 'config-store','stats', 'traci', 'applications'])
     module.source = [
-        'model/traffic-info.cc',
-        'helper/traffic-info-helper.cc',
+        'model/traffic-control-app.cc',
+        'helper/traffic-control-app-helper.cc',
         ]
 
     headers = bld(features='ns3header')
     headers.module = 'traci-applications'
     headers.source = [
-        'model/traffic-info.h',
-        'helper/traffic-info-helper.h',
+        'model/traffic-control-app.h',
+        'helper/traffic-control-app-helper.h',
         ]
 
     if bld.env.ENABLE_EXAMPLES:

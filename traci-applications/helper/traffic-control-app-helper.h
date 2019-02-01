@@ -15,11 +15,11 @@ namespace ns3 {
  * \ingroup TrafficInfo
  * \brief Create a server application which sends traffic information
  */
-class TrafficInfoServerHelper
+class RsuSpeedControlHelper
 {
 public:
 
-  TrafficInfoServerHelper (uint16_t port);
+  RsuSpeedControlHelper (uint16_t port);
 
   /**
    * Record an attribute to be set in each Application after it is is created.
@@ -79,7 +79,7 @@ private:
  * \ingroup TrafficInfo
  * \brief Create an application which sends a UDP packet and waits for an echo of this packet
  */
-class TrafficInfoClientHelper
+class VehicleSpeedControlHelper
 {
 public:
   /**
@@ -89,7 +89,7 @@ public:
    * \param ip The IP address of the remote Traffic Info server
    * \param port The port number of the remote Traffic Info server
    */
-  TrafficInfoClientHelper (uint16_t port);
+  VehicleSpeedControlHelper (uint16_t port);
   /**
    * Create TrafficInfoClientHelper which will make life easier for people trying
    * to set up simulations with echos.
